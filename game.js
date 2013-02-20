@@ -5,15 +5,23 @@ window.onload = function() {
     game.fps = 15;
     game.preload('images/map1.gif', 'images/chara0.gif');
     
+		getImage = function(img, offsetX, offsetY) {
+			var image = new Surface(96, 128); // width, height
+			// Takes the image content in src starting at (imgx, imgy) with a (Width, Height),
+			// scales it and draws it in this surface at (posx, posy) with a (scaledWidth, scaledHeight).
+			image.draw(game.assets[img], offsetX, offsetY, 96, 128, offsetX, offsetY, 96, 128);
+			//image.draw(game.assets[img], 0, 0, 96, 128, 0, 0, 96, 128);
+			return image;
+		}
+		
 		// addNPC(stage, position x, position y, sprite image, offset x, offset y, movement type, custom movement array)
 		// movement types = random, custom (no movement would be a movement type of 'none' or a movement array with nothing in it)
-		addNPC = function(stage, map, x, y, img, offsetx, offsety, movementType, movementArray) {
+		addNPC = function(stage, map, x, y, img, offsetX, offsetY, movementType, movementArray) {
 			var NPC = new Sprite(32, 32);
 			NPC.x = x;
 			NPC.y = y;
-			var image = new Surface(96, 128);
-			image.draw(game.assets[img], 0, 0, 96, 128, 0, 0, 96, 128);
-			NPC.image = image;
+			
+			NPC.image = getImage(img, offsetX, offsetY);
 			
 			NPC.isMoving = false;
 			NPC.direction = 0;
@@ -36,26 +44,29 @@ window.onload = function() {
 						}
 					} else {
 						this.vx = this.vy = 0;
-						var rand = Math.floor((Math.random()*4));
-						if (rand == 1) { // left
-							this.direction = 1;
-							this.vx = -4;
-						} else if (rand == 2) { // right
-							this.direction = 2;
-							this.vx = 4;
-						} else if (rand == 3) { // up
-							this.direction = 3;
-							this.vy = -4;
-						} else if (rand == 0) { // down
-							this.direction = 0;
-							this.vy = 4;
-						}
-						if (this.vx || this.vy) {
-							var x = this.x + (this.vx ? this.vx / Math.abs(this.vx) * 16 : 0) + 16;
-							var y = this.y + (this.vy ? this.vy / Math.abs(this.vy) * 16 : 0) + 16;
-							if (0 <= x && x < map.width && 0 <= y && y < map.height && !map.hitTest(x, y)) {
-								this.isMoving = true;
-								arguments.callee.call(this);
+						var moveRand = Math.floor((Math.random()*10));
+						if (moveRand > 8) {
+							var whichDir = Math.floor((Math.random()*4));
+							if (whichDir == 1) { // left
+								this.direction = 1;
+								this.vx = -4;
+							} else if (whichDir == 2) { // right
+								this.direction = 2;
+								this.vx = 4;
+							} else if (whichDir == 3) { // up
+								this.direction = 3;
+								this.vy = -4;
+							} else if (whichDir == 0) { // down
+								this.direction = 0;
+								this.vy = 4;
+							}
+							if (this.vx || this.vy) {
+								var x = this.x + (this.vx ? this.vx / Math.abs(this.vx) * 16 : 0) + 16;
+								var y = this.y + (this.vy ? this.vy / Math.abs(this.vy) * 16 : 0) + 16;
+								if (0 <= x && x < map.width && 0 <= y && y < map.height && !map.hitTest(x, y)) {
+									this.isMoving = true;
+									arguments.callee.call(this);
+								}
 							}
 						}
 					}
@@ -76,31 +87,34 @@ window.onload = function() {
 						}
 					} else {
 						this.vx = this.vy = 0;
-						if (movementArray[this.customMoveID] == 1) { // left
-							this.direction = 1;
-							this.vx = -4;
-						} else if (movementArray[this.customMoveID] == 2) { // right
-							this.direction = 2;
-							this.vx = 4;
-						} else if (movementArray[this.customMoveID] == 3) { // up
-							this.direction = 3;
-							this.vy = -4;
-						} else if (movementArray[this.customMoveID] == 0) { // down
-							this.direction = 0;
-							this.vy = 4;
-						}
-						if (this.vx || this.vy) {
-							var x = this.x + (this.vx ? this.vx / Math.abs(this.vx) * 16 : 0) + 16;
-							var y = this.y + (this.vy ? this.vy / Math.abs(this.vy) * 16 : 0) + 16;
-							if (0 <= x && x < map.width && 0 <= y && y < map.height && !map.hitTest(x, y)) {
-								this.isMoving = true;
-								arguments.callee.call(this);
+						var moveRand = Math.floor((Math.random()*10));
+						if (moveRand > 8) {
+							if (movementArray[this.customMoveID] == 1) { // left
+								this.direction = 1;
+								this.vx = -4;
+							} else if (movementArray[this.customMoveID] == 2) { // right
+								this.direction = 2;
+								this.vx = 4;
+							} else if (movementArray[this.customMoveID] == 3) { // up
+								this.direction = 3;
+								this.vy = -4;
+							} else if (movementArray[this.customMoveID] == 0) { // down
+								this.direction = 0;
+								this.vy = 4;
 							}
-						}
-						
-						this.customMoveID++;
-						if (this.customMoveID == movementArray.length) {
-							this.customMoveID = 0;
+							if (this.vx || this.vy) {
+								var x = this.x + (this.vx ? this.vx / Math.abs(this.vx) * 16 : 0) + 16;
+								var y = this.y + (this.vy ? this.vy / Math.abs(this.vy) * 16 : 0) + 16;
+								if (0 <= x && x < map.width && 0 <= y && y < map.height && !map.hitTest(x, y)) {
+									this.isMoving = true;
+									arguments.callee.call(this);
+								}
+							}
+							
+							this.customMoveID++;
+							if (this.customMoveID == movementArray.length) {
+								this.customMoveID = 0;
+							}
 						}
 					}
 				});
@@ -165,6 +179,8 @@ window.onload = function() {
         player.x = 6 * 16 - 8;
         player.y = 6 * 16;
         var image = new Surface(96, 128);
+				// Takes the image content in src starting at (imgx, imgy) with a (Width, Height),
+				// scales it and draws it in this surface at (posx, posy) with a (scaledWidth, scaledHeight).
         image.draw(game.assets['images/chara0.gif'], 0, 0, 96, 128, 0, 0, 96, 128);
         player.image = image;
 
@@ -210,11 +226,12 @@ window.onload = function() {
 					}
         });
 
-        stage.addChild(map);
+				stage.addChild(map);
         stage.addChild(player);
 				addNPC(stage, map, 4 * 16 - 8, 4 * 16, 'images/chara0.gif', 0, 0, 'random', null);
 				addNPC(stage, map, 6 * 16 - 8, 4 * 16, 'images/chara0.gif', 0, 0, 'custom', [0,1,2,3]);
         stage.addChild(foregroundMap);
+				//UI
         game.rootScene.addChild(stage);
 
         /*var pad = new Pad();
