@@ -178,7 +178,7 @@ window.onload = function() {
         var player = new Sprite(32, 32);
         player.x = 6 * 16 - 8;
         player.y = 6 * 16;
-        player.image = getImage('images/chara0.gif', 96, 128);
+        player.image = getImage('images/chara0.gif', 96, 0);
 
         player.isMoving = false;
         player.direction = 0;
