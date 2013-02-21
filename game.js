@@ -13,7 +13,20 @@ window.onload = function() {
 		// scales it and draws it in this surface at (posx, posy) with a (scaledWidth, scaledHeight).
 		image.draw(game.assets[img], offsetX, offsetY, 96, 128, 0, 0, 96, 128);
 		return image;
-	}
+	};
+	
+	// Orders a group of group(s) of objects by its Z index
+	orderGroupByZ = function(group) {
+		var ordered = new Array();
+		
+		for (var i = 0; i < group.childNodes.length; i++) {
+			currentGroup = group.childNodes[i];
+			
+			if (!(ordered[tile._zIndex] instanceof Array)) {
+				order[tile._zIndex] = new Array();
+			}
+		}
+	};
 	
 	randomMovement = function(that, map) {
 		var moveRand = Math.floor((Math.random()*10));
@@ -33,7 +46,7 @@ window.onload = function() {
 				that.vy = 4;
 			}
 		}
-	}
+	};
 	
 	customMovement = function(that, map, movementArray) {
 		var moveRand = Math.floor((Math.random()*10));
@@ -57,7 +70,7 @@ window.onload = function() {
 				that.customMoveID = 0;
 			}
 		}
-	}
+	};
 		
 	// addCharacter(stage, position x, position y, sprite image, offset x, offset y, movement type, custom movement array)
 	// movement types = random, custom (no movement would be a movement type of 'none' or a movement array with nothing in it)
@@ -70,6 +83,7 @@ window.onload = function() {
 		character.image = getImage(img, offsetX, offsetY);
 		character.x = x;
 		character.y = y;
+		character.z = y;
 		character.isMoving = false;
 		character.direction = 0;
 		character.walk = 1;
@@ -88,6 +102,7 @@ window.onload = function() {
 					if ((this.vx && (this.x-8) % 16 == 0) || (this.vy && this.y % 16 == 0)) {
 						this.isMoving = false;
 						this.walk = 1;
+						orderGroupByZ(stage);
 					}
 				} else {
 					this.vx = this.vy = 0;
@@ -105,9 +120,11 @@ window.onload = function() {
 						} else if (game.input.up) {
 							this.direction = 3;
 							this.vy = -4;
+							this.renderOrderID = this.renderOrderID - 16;
 						} else if (game.input.down) {
 							this.direction = 0;
 							this.vy = 4;
+							this.renderOrderID = this.renderOrderID + 16;
 						}
 					}
 					
@@ -199,6 +216,8 @@ window.onload = function() {
 		//addCharacter(stage, map, 'Allice', 4 * 16 - 8, 4 * 16, 'images/chara0.gif', 192, 0, 'random', null);
 		//addCharacter(stage, map, 'Bitch', 6 * 16 - 8, 4 * 16, 'images/chara0.gif', 0, 0, 'custom', [0,1,2,3]);
 		addCharacter(stage, map, 'Still', 6 * 16 - 8, 3 * 16, 'images/chara0.gif', 0, 0, null, [0,1,2,3]);
+		
+		
 		stage.addChild(foregroundMap);
 		//UI/HUD
 		game.rootScene.addChild(stage);
