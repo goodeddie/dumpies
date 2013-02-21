@@ -1,9 +1,9 @@
 enchant();
 
 window.onload = function() {
-    var game = new Game(120, 120); // x,y make up viewport
-    game.fps = 15;
-    game.preload('images/map1.gif', 'images/chara0.gif', 'images/chara6.png');
+	var game = new Game(120, 120); // x,y make up viewport
+	game.fps = 15;
+	game.preload('images/map1.gif', 'images/chara0.gif', 'images/chara6.png');
 	
 	var SpriteLabel = enchant.Class.mixClasses(Sprite, Label, true);
     
@@ -63,13 +63,13 @@ window.onload = function() {
 	// movement types = random, custom (no movement would be a movement type of 'none' or a movement array with nothing in it)
 	addCharacter = function(stage, map, name, x, y, img, offsetX, offsetY, movementType, movementArray) {
 		var character = new SpriteLabel(32, 32, name);
-        character.color = 'white'; // Color of name
+		character.color = 'white'; // Color of name
 		//character.width = 128;
-        //character.font = '10px Arial';
+		//character.font = '10px Arial';
 		character.font = '10px Georgia, serif';
-        character.image = getImage(img, offsetX, offsetY);
-        character.x = x;
-        character.y = y;
+		character.image = getImage(img, offsetX, offsetY);
+		character.x = x;
+		character.y = y;
 		character.isMoving = false;
 		character.direction = 0;
 		character.walk = 1;
@@ -114,7 +114,7 @@ window.onload = function() {
 					if (this.vx || this.vy) {
 						var x = this.x + (this.vx ? this.vx / Math.abs(this.vx) * 16 : 0) + 16;
 						var y = this.y + (this.vy ? this.vy / Math.abs(this.vy) * 16 : 0) + 16;
-						if (0 <= x && x < map.width && 0 <= y && y < map.height && !map.hitTest(x, y)) {
+						if (0 <= x && x < map.width && 0 <= y && y < map.height && !map.hitTest(x, y)) { // Add collision with player
 							this.isMoving = true;
 							//arguments.callee.call(this);
 						}
@@ -128,11 +128,11 @@ window.onload = function() {
 	};
 		
 	game.onload = function() {
-        var stage = new Group();
-				
-        var map = new Map(16, 16);
-        map.image = game.assets['images/map1.gif'];
-        map.loadData([
+		var stage = new Group();
+		
+		var map = new Map(16, 16);
+		map.image = game.assets['images/map1.gif'];
+		map.loadData([
 			[322,322,322,322,322,322,224,225,225],
 			[322,45,322,322,322,322,322,322,322],
 			[322,45,322,322,322,322,322,322,322],
@@ -142,34 +142,34 @@ window.onload = function() {
 			[322,322,322,342,342,342,342,342,342],
 			[322,322,322,342,342,342,342,342,342],
 			[322,322,322,342,342,342,342,342,342]
-        ],[
+		],[
 			[ -1, -1, -1, -1, -1, -1, -1, -1, -1],
 			[ -1,461,462, -1,461,462, -1,461,462],
 			[ -1,481,482, -1,481,482,421,481,482],
 			[ -1,421,421,321,341,341,341,341,341],
 			[ -1,461,462,321,422, -1, -1,400,400],
-			[ -1,481,482,321, -1, -1, -1, -1,400],
-			[ -1, -1, -1,321,521,521,521,521,521],
-			[ -1,461,462,321, -1, -1, -1, -1, -1],
-			[ -1,481,482,321, -1, -1, -1, -1,400]
-        ]);
-        map.collisionData = [
+			[ -1,481,482, -1, -1, -1, -1, -1,400],
+			[ -1, -1, -1, -1, -1, -1,521,521,521],
+			[ -1,461,462, -1, -1, -1, -1, -1, -1],
+			[ -1,481,482, -1, -1, -1, -1, -1,400]
+		]);
+		map.collisionData = [
 			[  0,  0,  0,  0,  0,  0,  1,  1,  1],
 			[  0,  0,  0,  0,  0,  0,  0,  0,  0],
-			[  0,  1,  1,  0,  1,  1,  0,  1,  1],
+			[  0,  0,  0,  0,  1,  1,  0,  1,  1],
 			[  0,  0,  0,  1,  1,  1,  1,  1,  1],
 			[  0,  0,  0,  1,  0,  0,  0,  1,  1],
-			[  0,  1,  1,  1,  0,  0,  0,  0,  1],
-			[  0,  0,  0,  1,  1,  1,  1,  1,  1],
-			[  0,  0,  0,  1,  0,  0,  0,  0,  0],
-			[  0,  1,  1,  1,  0,  0,  0,  0,  1]
-        ];
-
-        var foregroundMap = new Map(16, 16);
-        foregroundMap.image = game.assets['images/map1.gif'];
-        foregroundMap.loadData([
+			[  0,  1,  1,  0,  0,  0,  0,  0,  1],
+			[  0,  0,  0,  0,  0,  0,  1,  1,  1],
+			[  0,  0,  0,  0,  0,  0,  0,  0,  0],
+			[  0,  1,  1,  0,  0,  0,  0,  0,  1]
+		];
+		
+		var foregroundMap = new Map(16, 16);
+		foregroundMap.image = game.assets['images/map1.gif'];
+		foregroundMap.loadData([
 			[ -1, -1, -1, -1, -1, -1, -1, -1, -1],
-			[ -1,461,462, -1,461,462, -1,461,462],
+			[ -1, -1, -1, -1,461,462, -1,461,462],
 			[ -1, -1, -1, -1, -1, -1, -1, -1, -1],
 			[ -1, -1, -1, -1, -1, -1, -1, -1, -1],
 			[ -1,461,462, -1, -1, -1, -1, -1, -1],
@@ -177,30 +177,48 @@ window.onload = function() {
 			[ -1, -1, -1, -1, -1, -1, -1, -1, -1],
 			[ -1,461,462, -1, -1, -1, -1, -1, -1],
 			[ -1, -1, -1, -1, -1, -1, -1, -1, -1]
-        ]);
+		]);
+		
+		
+		var stage2 = new Group();
+		/*var character2 = new SpriteLabel(32, 32, 'other');
+		character2.color = 'white'; // Color of name
+		//character2.width = 128;
+		//character2.font = '10px Arial';
+		character2.font = '10px Georgia, serif';
+		character2.image = getImage('images/chara0.gif', 0, 0);
+		character2.x = 6 * 16 - 8;
+		character2.y = 3 * 16;
+		stage2.addChild(character2);*/
+		
+		
 		
 		stage.addChild(map);
-		var player = addCharacter(stage, map, null, 6 * 16 - 8, 6 * 16, 'images/chara0.gif', 96, 0, 'player', null);
-		addCharacter(stage, map, 'Allice', 4 * 16 - 8, 4 * 16, 'images/chara0.gif', 192, 0, 'random', null);
-		addCharacter(stage, map, 'Warren', 6 * 16 - 8, 4 * 16, 'images/chara0.gif', 0, 0, 'custom', [0,1,2,3]);
-        stage.addChild(foregroundMap);
+		//var player = addCharacter(stage2, map, null, 6 * 16 - 8, 6 * 16, 'images/chara0.gif', 96, 0, 'player', null);
+		var player = addCharacter(stage, map, null, 0, 0, 'images/chara0.gif', 96, 0, 'player', null);
+		//addCharacter(stage, map, 'Allice', 4 * 16 - 8, 4 * 16, 'images/chara0.gif', 192, 0, 'random', null);
+		//addCharacter(stage, map, 'Bitch', 6 * 16 - 8, 4 * 16, 'images/chara0.gif', 0, 0, 'custom', [0,1,2,3]);
+		addCharacter(stage, map, 'Still', 6 * 16 - 8, 3 * 16, 'images/chara0.gif', 0, 0, null, [0,1,2,3]);
+		stage.addChild(foregroundMap);
 		//UI/HUD
-        game.rootScene.addChild(stage);
+		game.rootScene.addChild(stage);
 
-        /*var pad = new Pad();
-        pad.x = 0;
-        pad.y = 220;
-        game.rootScene.addChild(pad);*/
-
-        // Update viewport
+		/*var pad = new Pad();
+		pad.x = 0;
+		pad.y = 220;
+		game.rootScene.addChild(pad);*/
+		
+		game.rootScene.addChild(stage2);
+		
+		// Update viewport
 		game.rootScene.addEventListener('enterframe', function(e) {
 			var x = Math.min((game.width  - 16) / 2 - player.x, 0);
 			var y = Math.min((game.height - 16) / 2 - player.y, 0);
 			x = Math.max(game.width,  x + map.width)  - map.width;
 			y = Math.max(game.height, y + map.height) - map.height;
-			stage.x = x;
-			stage.y = y;
-        });
-    };
-    game.start();
+			//stage.x = x;
+			//stage.y = y;
+		});
+	};
+	game.start();
 };
