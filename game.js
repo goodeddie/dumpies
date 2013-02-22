@@ -2,7 +2,7 @@ enchant();
 
 window.onload = function() {
 	var game = new Game(120, 120); // x,y make up viewport
-	game.fps = 15;
+	game.fps = 30;
 	game.preload('images/map1.gif', 'images/chara0.gif', 'images/chara6.png');
 	
 	var SpriteLabel = enchant.Class.mixClasses(Sprite, Label, true);
@@ -121,7 +121,6 @@ window.onload = function() {
 		character.image = getImage(img, offsetX, offsetY);
 		character.x = x;
 		character.y = y;
-		character._z = y; // Old Z index
 		character.z = y;
 		character.isMoving = false;
 		character.direction = 0;
@@ -152,17 +151,17 @@ window.onload = function() {
 					} else if (movementType == 'player') {
 						if (game.input.left) {
 							this.direction = 1;
-							this.vx = -4;
+							this.vx = -2;
 						} else if (game.input.right) {
 							this.direction = 2;
-							this.vx = 4;
+							this.vx = 2;
 						} else if (game.input.up) {
 							this.direction = 3;
-							this.vy = -4;
+							this.vy = -2;
 							this.z -= 16;
 						} else if (game.input.down) {
 							this.direction = 0;
-							this.vy = 4;
+							this.vy = 2;
 							this.z += 16;
 						}
 					}
@@ -180,7 +179,6 @@ window.onload = function() {
 		}
 		
 		addNodeToArray(character);
-		//group.addChild(character);
 		return character;
 	};
 		
