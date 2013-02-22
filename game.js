@@ -251,7 +251,7 @@ window.onload = function() {
 		var player = addCharacter(level, map, null, 0, 0, 'images/chara0.gif', 96, 0, 'player', null);
 		addCharacter(level, map, 'Allice', 0, 2, 'images/chara0.gif', 192, 0, 'random', null);
 		addCharacter(level, map, 'Bitch', 6, 4, 'images/chara0.gif', 0, 0, 'custom', [0,1,2,3]);
-		addCharacter(level, map, 'Still', 2, 1, 'images/chara0.gif', 0, 0, null, [0,1,2,3]);
+		addCharacter(level, map, 'Still', 3, 2, 'images/chara0.gif', 0, 0, null, [0,1,2,3]);
 		
 		
 		sortCharacters(level);
@@ -276,6 +276,8 @@ window.onload = function() {
 			y = Math.max(game.height, y + map.height) - map.height;
 			level.x = x;
 			level.y = y;
+			//level.x--;
+			//level.y--;
 		});
 	};
 	game.start();
