@@ -15,16 +15,23 @@ window.onload = function() {
 		return image;
 	};
 	
-	// Orders a group of group(s) of objects by its Z index
-	orderGroupByZ = function(group) {
-		var ordered = new Array();
+	// Places node in correct group by its Z index if necessary
+	manageGroup = function(node, oldGroup, newGroup) {
+		var groupArray = new Array();
 		
-		for (var i = 0; i < group.childNodes.length; i++) {
-			currentGroup = group.childNodes[i];
+		if (!(groupArray[oldGroup] instanceof Array)) {
+			order[tile._zIndex] = new Array();
+		}
+		
+		
+		
+		if (game.rootScene.childNodes[oldGroup] != undefined) {
+			game.rootScene.childNodes[oldGroup].removeChild(node);
+		}
+		
+		if (game.rootScene.childNodes[newGroup] != undefined) {
 			
-			if (!(ordered[tile._zIndex] instanceof Array)) {
-				order[tile._zIndex] = new Array();
-			}
+			game.rootScene.childNodes[newGroup].addChild(node);
 		}
 	};
 	
@@ -72,9 +79,9 @@ window.onload = function() {
 		}
 	};
 		
-	// addCharacter(stage, position x, position y, sprite image, offset x, offset y, movement type, custom movement array)
+	// addCharacter(group, position x, position y, sprite image, offset x, offset y, movement type, custom movement array)
 	// movement types = random, custom (no movement would be a movement type of 'none' or a movement array with nothing in it)
-	addCharacter = function(stage, map, name, x, y, img, offsetX, offsetY, movementType, movementArray) {
+	addCharacter = function(group, map, name, x, y, img, offsetX, offsetY, movementType, movementArray) {
 		var character = new SpriteLabel(32, 32, name);
 		character.color = 'white'; // Color of name
 		//character.width = 128;
@@ -83,6 +90,7 @@ window.onload = function() {
 		character.image = getImage(img, offsetX, offsetY);
 		character.x = x;
 		character.y = y;
+		character._z = y; // Old Z index
 		character.z = y;
 		character.isMoving = false;
 		character.direction = 0;
@@ -102,7 +110,7 @@ window.onload = function() {
 					if ((this.vx && (this.x-8) % 16 == 0) || (this.vy && this.y % 16 == 0)) {
 						this.isMoving = false;
 						this.walk = 1;
-						orderGroupByZ(stage);
+						manageGroup(this, this._z, this.z);
 					}
 				} else {
 					this.vx = this.vy = 0;
@@ -120,11 +128,11 @@ window.onload = function() {
 						} else if (game.input.up) {
 							this.direction = 3;
 							this.vy = -4;
-							this.renderOrderID = this.renderOrderID - 16;
+							this.z -= 16;
 						} else if (game.input.down) {
 							this.direction = 0;
 							this.vy = 4;
-							this.renderOrderID = this.renderOrderID + 16;
+							this.z += 16;
 						}
 					}
 					
@@ -140,7 +148,7 @@ window.onload = function() {
 			});
 		}
 		
-		stage.addChild(character);
+		group.addChild(character);
 		return character;
 	};
 		
@@ -219,6 +227,7 @@ window.onload = function() {
 		
 		
 		stage.addChild(foregroundMap);
+		
 		//UI/HUD
 		game.rootScene.addChild(stage);
 
