@@ -6,6 +6,8 @@ window.onload = function() {
 	game.preload('images/map1.gif', 'images/chara0.gif', 'images/chara6.png');
 	
 	var SpriteLabel = enchant.Class.mixClasses(Sprite, Label, true);
+	
+	var arrayOfCharacters = new Array();
     
 	getImage = function(img, offsetX, offsetY) {
 		var image = new Surface(96, 128); // width, height
@@ -15,24 +17,53 @@ window.onload = function() {
 		return image;
 	};
 	
-	// Places node in correct group by its Z index if necessary
-	manageGroup = function(node, oldGroup, newGroup) {
-		var groupArray = new Array();
+	getGroup = function(_array) {
+		var _mainGroup = new Group();
 		
-		if (!(groupArray[oldGroup] instanceof Array)) {
-			order[tile._zIndex] = new Array();
+		for(var i in _array) {
+			var subGroup = new Group();
+			_mainGroup.addChild(subGroup);
+			for(var j in _array[i]) {
+				_mainGroup.lastChild.addChild(_array[i][j]);
+			}
 		}
 		
-		
-		
-		if (game.rootScene.childNodes[oldGroup] != undefined) {
-			game.rootScene.childNodes[oldGroup].removeChild(node);
+		return _mainGroup;
+	};
+	
+	getSortedArray = function(_array) {
+		var _mainArray = new Array();
+	
+		for(var i in _array) {
+			if (!(_mainArray[_array[i][0].z] instanceof Array)) {
+				_mainArray[_array[i][0].z] = new Array();
+			}
+			for(var j in _array[i]) {
+				_mainArray[_array[i][0].z].push(_array[i][j]);
+			}
 		}
 		
-		if (game.rootScene.childNodes[newGroup] != undefined) {
-			
-			game.rootScene.childNodes[newGroup].addChild(node);
+		return _mainArray;
+	};
+	
+	sortCharacters = function(_level) {
+		if (_level.childNodes[1] != undefined) {
+			_level.childNodes[1].removeChild(_level.childNodes[1].firstChild);
 		}
+		else {
+			var charactersGroup = new Group();
+			_level.addChild(charactersGroup);
+		}
+		
+		_level.childNodes[1].addChild(getGroup(getSortedArray(arrayOfCharacters)));
+	};
+	
+	addNodeToArray = function(_node) {
+		if (!(_node.z instanceof Array)) {
+			arrayOfCharacters[_node.z] = new Array();
+		}
+		
+		arrayOfCharacters[_node.z].push(_node);
 	};
 	
 	randomMovement = function(that, map) {
@@ -110,7 +141,7 @@ window.onload = function() {
 					if ((this.vx && (this.x-8) % 16 == 0) || (this.vy && this.y % 16 == 0)) {
 						this.isMoving = false;
 						this.walk = 1;
-						manageGroup(this, this._z, this.z);
+						sortCharacters(group);
 					}
 				} else {
 					this.vx = this.vy = 0;
@@ -148,12 +179,13 @@ window.onload = function() {
 			});
 		}
 		
-		group.addChild(character);
+		addNodeToArray(character);
+		//group.addChild(character);
 		return character;
 	};
 		
 	game.onload = function() {
-		var stage = new Group();
+		var level = new Group();
 		
 		var map = new Map(16, 16);
 		map.image = game.assets['images/map1.gif'];
@@ -204,39 +236,27 @@ window.onload = function() {
 			[ -1, -1, -1, -1, -1, -1, -1, -1, -1]
 		]);
 		
-		
-		var stage2 = new Group();
-		/*var character2 = new SpriteLabel(32, 32, 'other');
-		character2.color = 'white'; // Color of name
-		//character2.width = 128;
-		//character2.font = '10px Arial';
-		character2.font = '10px Georgia, serif';
-		character2.image = getImage('images/chara0.gif', 0, 0);
-		character2.x = 6 * 16 - 8;
-		character2.y = 3 * 16;
-		stage2.addChild(character2);*/
+		level.addChild(map);
 		
 		
-		
-		stage.addChild(map);
 		//var player = addCharacter(stage2, map, null, 6 * 16 - 8, 6 * 16, 'images/chara0.gif', 96, 0, 'player', null);
-		var player = addCharacter(stage, map, null, 0, 0, 'images/chara0.gif', 96, 0, 'player', null);
-		//addCharacter(stage, map, 'Allice', 4 * 16 - 8, 4 * 16, 'images/chara0.gif', 192, 0, 'random', null);
-		//addCharacter(stage, map, 'Bitch', 6 * 16 - 8, 4 * 16, 'images/chara0.gif', 0, 0, 'custom', [0,1,2,3]);
-		addCharacter(stage, map, 'Still', 6 * 16 - 8, 3 * 16, 'images/chara0.gif', 0, 0, null, [0,1,2,3]);
+		var player = addCharacter(level, map, null, 0, 0, 'images/chara0.gif', 96, 0, 'player', null);
+		//addCharacter(level, map, 'Allice', 4 * 16 - 8, 4 * 16, 'images/chara0.gif', 192, 0, 'random', null);
+		//addCharacter(level, map, 'Bitch', 6 * 16 - 8, 4 * 16, 'images/chara0.gif', 0, 0, 'custom', [0,1,2,3]);
+		addCharacter(level, map, 'Still', 6 * 16 - 8, 3 * 16, 'images/chara0.gif', 0, 0, null, [0,1,2,3]);
 		
 		
-		stage.addChild(foregroundMap);
+		sortCharacters(level);
 		
+		
+		level.addChild(foregroundMap);
 		//UI/HUD
-		game.rootScene.addChild(stage);
+		game.rootScene.addChild(level);
 
 		/*var pad = new Pad();
 		pad.x = 0;
 		pad.y = 220;
 		game.rootScene.addChild(pad);*/
-		
-		game.rootScene.addChild(stage2);
 		
 		// Update viewport
 		game.rootScene.addEventListener('enterframe', function(e) {
@@ -244,8 +264,8 @@ window.onload = function() {
 			var y = Math.min((game.height - 16) / 2 - player.y, 0);
 			x = Math.max(game.width,  x + map.width)  - map.width;
 			y = Math.max(game.height, y + map.height) - map.height;
-			//stage.x = x;
-			//stage.y = y;
+			//level.x = x;
+			//level.y = y;
 		});
 	};
 	game.start();
