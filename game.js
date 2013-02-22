@@ -2,7 +2,7 @@ enchant();
 
 window.onload = function() {
 	var game = new Game(120, 120); // x,y make up viewport
-	game.fps = 30;
+	game.fps = 60;
 	game.preload('images/map1.gif', 'images/chara0.gif', 'images/chara6.png');
 	
 	var SpriteLabel = enchant.Class.mixClasses(Sprite, Label, true);
@@ -129,11 +129,12 @@ window.onload = function() {
 		
 		if (movementType != undefined) {
 			character.addEventListener('enterframe', function() {
+				// direction is which row, 3 is the number of frames for animation, walk is which frame in animation
 				this.frame = this.direction * 3 + this.walk;
 				if (this.isMoving) {
 					this.moveBy(this.vx, this.vy);
 
-					if (!(game.frame % 3)) {
+					if (!(game.frame % 12)) {
 						this.walk++;
 						this.walk %= 3;
 					}
@@ -151,17 +152,17 @@ window.onload = function() {
 					} else if (movementType == 'player') {
 						if (game.input.left) {
 							this.direction = 1;
-							this.vx = -2;
+							this.vx = -1;
 						} else if (game.input.right) {
 							this.direction = 2;
-							this.vx = 2;
+							this.vx = 1;
 						} else if (game.input.up) {
 							this.direction = 3;
-							this.vy = -2;
+							this.vy = -1;
 							this.z -= 16;
 						} else if (game.input.down) {
 							this.direction = 0;
-							this.vy = 2;
+							this.vy = 1;
 							this.z += 16;
 						}
 					}
