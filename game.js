@@ -87,11 +87,9 @@ window.onload = function() {
 			} else if (whichDir == 3) { // up
 				that.direction = 3;
 				that.vy = -1;
-				that.z -= 1;
 			} else if (whichDir == 0) { // down
 				that.direction = 0;
 				that.vy = 1;
-				that.z += 1;
 			}
 		}
 	};
@@ -108,11 +106,9 @@ window.onload = function() {
 			} else if (movementArray[that.customMoveID] == 3) { // up
 				that.direction = 3;
 				that.vy = -1;
-				that.z -= 1;
 			} else if (movementArray[that.customMoveID] == 0) { // down
 				that.direction = 0;
 				that.vy = 1;
-				that.z += 1;
 			}
 			
 			that.customMoveID++;
@@ -286,5 +282,8 @@ window.onload = function() {
 	
 	addDebug = function (text) {//addDebug(this.z);
 		document.getElementById('debug').innerHTML = text + document.getElementById('debug').innerHTML;
+	};
+	addDebug2 = function (text) {//addDebug2(this.z);
+		document.getElementById('debug2').innerHTML = text + document.getElementById('debug2').innerHTML;
 	};
 };
