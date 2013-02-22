@@ -22,7 +22,7 @@ window.onload = function() {
 	};
 	
 	getYPos = function(tile) {
-		return tile * 16;
+		return tile * 16 - 16;
 	};
 	
 	getGroup = function(_array) {
@@ -67,7 +67,7 @@ window.onload = function() {
 	};
 	
 	addNodeToArray = function(_node) {
-		if (!(_node.z instanceof Array)) {
+		if (!(arrayOfCharacters[_node.z] instanceof Array)) {
 			arrayOfCharacters[_node.z] = new Array();
 		}
 		
@@ -75,7 +75,6 @@ window.onload = function() {
 	};
 	
 	randomMovement = function(that, map) {
-		//var moveRand = Math.floor((Math.random()*100));
 		var moveRand = Math.random()*10;
 		if (moveRand > 9.8) {
 			var whichDir = Math.floor((Math.random()*4));
@@ -98,7 +97,6 @@ window.onload = function() {
 	};
 	
 	customMovement = function(that, map, movementArray) {
-		//var moveRand = Math.floor((Math.random()*100));
 		var moveRand = Math.random()*10;
 		if (moveRand > 9.8) {
 			if (movementArray[that.customMoveID] == 1) { // left
@@ -282,4 +280,8 @@ window.onload = function() {
 		});
 	};
 	game.start();
+	
+	addDebug = function (text) {//addDebug(this.z);
+		document.getElementById('debug').innerHTML = text + document.getElementById('debug').innerHTML;
+	};
 };
