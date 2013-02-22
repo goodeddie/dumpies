@@ -160,7 +160,7 @@ window.onload = function() {
 						randomMovement(this, map);
 					} else if (movementType == 'custom') {
 						customMovement(this, map, movementArray);
-					} else if (movementType == 'player') {addDebug(this.z);
+					} else if (movementType == 'player') {
 						if (game.input.left) {
 							this.direction = 1;
 							this.vx = -1;
