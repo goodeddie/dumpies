@@ -17,6 +17,14 @@ window.onload = function() {
 		return image;
 	};
 	
+	getXPos = function(tile) {
+		return tile * 16 - 8;
+	};
+	
+	getYPos = function(tile) {
+		return tile * 16;
+	};
+	
 	getGroup = function(_array) {
 		var _mainGroup = new Group();
 		
@@ -67,40 +75,46 @@ window.onload = function() {
 	};
 	
 	randomMovement = function(that, map) {
-		var moveRand = Math.floor((Math.random()*10));
-		if (moveRand > 8) {
+		//var moveRand = Math.floor((Math.random()*100));
+		var moveRand = Math.random()*10;
+		if (moveRand > 9.8) {
 			var whichDir = Math.floor((Math.random()*4));
 			if (whichDir == 1) { // left
 				that.direction = 1;
-				that.vx = -4;
+				that.vx = -1;
 			} else if (whichDir == 2) { // right
 				that.direction = 2;
-				that.vx = 4;
+				that.vx = 1;
 			} else if (whichDir == 3) { // up
 				that.direction = 3;
-				that.vy = -4;
+				that.vy = -1;
+				that.z -= 1;
 			} else if (whichDir == 0) { // down
 				that.direction = 0;
-				that.vy = 4;
+				that.vy = 1;
+				that.z += 1;
 			}
 		}
 	};
 	
 	customMovement = function(that, map, movementArray) {
-		var moveRand = Math.floor((Math.random()*10));
-		if (moveRand > 8) {
+		//var moveRand = Math.floor((Math.random()*100));
+		var moveRand = Math.random()*10;
+		if (moveRand > 9.8) {
 			if (movementArray[that.customMoveID] == 1) { // left
 				that.direction = 1;
-				that.vx = -4;
+				that.vx = -1;
 			} else if (movementArray[that.customMoveID] == 2) { // right
 				that.direction = 2;
-				that.vx = 4;
+				that.vx = 1;
 			} else if (movementArray[that.customMoveID] == 3) { // up
 				that.direction = 3;
-				that.vy = -4;
+				that.vy = -1;
+				that.z -= 1;
 			} else if (movementArray[that.customMoveID] == 0) { // down
 				that.direction = 0;
-				that.vy = 4;
+				that.vy = 1;
+				that.z += 1;
 			}
 			
 			that.customMoveID++;
@@ -112,16 +126,16 @@ window.onload = function() {
 		
 	// addCharacter(group, position x, position y, sprite image, offset x, offset y, movement type, custom movement array)
 	// movement types = random, custom (no movement would be a movement type of 'none' or a movement array with nothing in it)
-	addCharacter = function(group, map, name, x, y, img, offsetX, offsetY, movementType, movementArray) {
+	addCharacter = function(group, map, name, tileX, tileY, img, offsetX, offsetY, movementType, movementArray) {
 		var character = new SpriteLabel(32, 32, name);
 		character.color = 'white'; // Color of name
 		//character.width = 128;
 		//character.font = '10px Arial';
 		character.font = '10px Georgia, serif';
 		character.image = getImage(img, offsetX, offsetY);
-		character.x = x;
-		character.y = y;
-		character.z = y;
+		character.x = getXPos(tileX);
+		character.y = getYPos(tileY);
+		character.z = tileY;
 		character.isMoving = false;
 		character.direction = 0;
 		character.walk = 1;
@@ -141,7 +155,6 @@ window.onload = function() {
 					if ((this.vx && (this.x-8) % 16 == 0) || (this.vy && this.y % 16 == 0)) {
 						this.isMoving = false;
 						this.walk = 1;
-						sortCharacters(group);
 					}
 				} else {
 					this.vx = this.vy = 0;
@@ -159,11 +172,11 @@ window.onload = function() {
 						} else if (game.input.up) {
 							this.direction = 3;
 							this.vy = -1;
-							this.z -= 16;
+							this.z -= 1;
 						} else if (game.input.down) {
 							this.direction = 0;
 							this.vy = 1;
-							this.z += 16;
+							this.z += 1;
 						}
 					}
 					
@@ -200,8 +213,8 @@ window.onload = function() {
 			[322,322,322,342,342,342,342,342,342]
 		],[
 			[ -1, -1, -1, -1, -1, -1, -1, -1, -1],
-			[ -1,461,462, -1,461,462, -1,461,462],
-			[ -1,481,482, -1,481,482,421,481,482],
+			[ -1, -1, -1, -1,461,462, -1,461,462],
+			[ -1, -1, -1, -1,481,482,421,481,482],
 			[ -1,421,421,321,341,341,341,341,341],
 			[ -1,461,462,321,422, -1, -1,400,400],
 			[ -1,481,482, -1, -1, -1, -1, -1,400],
@@ -238,11 +251,10 @@ window.onload = function() {
 		level.addChild(map);
 		
 		
-		//var player = addCharacter(stage2, map, null, 6 * 16 - 8, 6 * 16, 'images/chara0.gif', 96, 0, 'player', null);
 		var player = addCharacter(level, map, null, 0, 0, 'images/chara0.gif', 96, 0, 'player', null);
-		//addCharacter(level, map, 'Allice', 4 * 16 - 8, 4 * 16, 'images/chara0.gif', 192, 0, 'random', null);
-		//addCharacter(level, map, 'Bitch', 6 * 16 - 8, 4 * 16, 'images/chara0.gif', 0, 0, 'custom', [0,1,2,3]);
-		addCharacter(level, map, 'Still', 6 * 16 - 8, 3 * 16, 'images/chara0.gif', 0, 0, null, [0,1,2,3]);
+		addCharacter(level, map, 'Allice', 0, 2, 'images/chara0.gif', 192, 0, 'random', null);
+		addCharacter(level, map, 'Bitch', 6, 4, 'images/chara0.gif', 0, 0, 'custom', [0,1,2,3]);
+		addCharacter(level, map, 'Still', 2, 1, 'images/chara0.gif', 0, 0, null, [0,1,2,3]);
 		
 		
 		sortCharacters(level);
@@ -259,6 +271,8 @@ window.onload = function() {
 		
 		// Update viewport
 		game.rootScene.addEventListener('enterframe', function(e) {
+			sortCharacters(level);
+			
 			var x = Math.min((game.width  - 16) / 2 - player.x, 0);
 			var y = Math.min((game.height - 16) / 2 - player.y, 0);
 			x = Math.max(game.width,  x + map.width)  - map.width;
