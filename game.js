@@ -76,7 +76,7 @@ window.onload = function() {
 	
 	randomMovement = function(that, map) {
 		var moveRand = Math.random()*10;
-		if (moveRand > 9.8) {
+		if (moveRand > 9.9) {
 			var whichDir = Math.floor((Math.random()*4));
 			if (whichDir == 1) { // left
 				that.direction = 1;
@@ -96,7 +96,7 @@ window.onload = function() {
 	
 	customMovement = function(that, map, movementArray) {
 		var moveRand = Math.random()*10;
-		if (moveRand > 9.8) {
+		if (moveRand > 9.9) {
 			if (movementArray[that.customMoveID] == 1) { // left
 				that.direction = 1;
 				that.vx = -1;
@@ -274,8 +274,8 @@ window.onload = function() {
 			var y = Math.min((game.height - 16) / 2 - player.y, 0);
 			x = Math.max(game.width,  x + map.width)  - map.width;
 			y = Math.max(game.height, y + map.height) - map.height;
-			//level.x = x;
-			//level.y = y;
+			level.x = x;
+			level.y = y;
 		});
 	};
 	game.start();
