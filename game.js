@@ -160,7 +160,7 @@ window.onload = function() {
 						randomMovement(this, map);
 					} else if (movementType == 'custom') {
 						customMovement(this, map, movementArray);
-					} else if (movementType == 'player') {
+					} else if (movementType == 'player') {addDebug(this.z);
 						if (game.input.left) {
 							this.direction = 1;
 							this.vx = -1;
@@ -170,11 +170,9 @@ window.onload = function() {
 						} else if (game.input.up) {
 							this.direction = 3;
 							this.vy = -1;
-							this.z -= 1;
 						} else if (game.input.down) {
 							this.direction = 0;
 							this.vy = 1;
-							this.z += 1;
 						}
 					}
 					
@@ -183,6 +181,11 @@ window.onload = function() {
 						var y = this.y + (this.vy ? this.vy / Math.abs(this.vy) * 16 : 0) + 16;
 						if (0 <= x && x < map.width && 0 <= y && y < map.height && !map.hitTest(x, y)) { // Add collision with player
 							this.isMoving = true;
+							if (this.vy < 0) {
+								this.z -= 1;
+							} else if (this.vy > 0) {
+								this.z += 1;
+							}
 							//arguments.callee.call(this);
 						}
 					}
