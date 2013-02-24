@@ -175,7 +175,7 @@ window.onload = function() {
 					if (this.vx || this.vy) {
 						var x = this.x + (this.vx ? this.vx / Math.abs(this.vx) * 16 : 0) + 16;
 						var y = this.y + (this.vy ? this.vy / Math.abs(this.vy) * 16 : 0) + 16;
-						if (0 <= x && x < map.width && 0 <= y && y < map.height && !map.hitTest(x, y)) { // Add collision with player
+						if (0 <= x && x < map.width && 0 <= y && y < map.height && !map.hitTest(x, y)) { // Use .intersect
 							this.isMoving = true;
 							if (this.vy < 0) {
 								this.z -= 1;
@@ -248,10 +248,11 @@ window.onload = function() {
 		level.addChild(map);
 		
 		
-		var player = addCharacter(level, map, null, 0, 0, 'images/chara0.gif', 96, 0, 'player', null);
+		var player = addCharacter(level, map, null, 0, 0, 'images/chara6.png', 96, 0, 'player', null);
 		addCharacter(level, map, 'Allice', 0, 2, 'images/chara0.gif', 192, 0, 'random', null);
 		addCharacter(level, map, 'Bitch', 6, 4, 'images/chara0.gif', 0, 0, 'custom', [0,1,2,3]);
 		addCharacter(level, map, 'Still', 3, 2, 'images/chara0.gif', 0, 0, null, [0,1,2,3]);
+		addCharacter(level, map, 'Warren', 2, 3, 'images/chara6.png', 0, 0, 'random', [0,1,2,3]);
 		
 		
 		sortCharacters(level);
