@@ -74,6 +74,17 @@ window.onload = function() {
 		arrayOfCharacters[_node.z].push(_node);
 	};
 	
+	mapSpriteTest = function(_x, _y) {
+		for(var i in arrayOfCharacters) {addDebug(i);
+			if ((arrayOfCharacters[i].x == _x) &&
+				(arrayOfCharacters[i].y == _y)) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
 	randomMovement = function(that, map) {
 		var moveRand = Math.random()*10;
 		if (moveRand > 9.9) {
@@ -175,7 +186,7 @@ window.onload = function() {
 					if (this.vx || this.vy) {
 						var x = this.x + (this.vx ? this.vx / Math.abs(this.vx) * 16 : 0) + 16;
 						var y = this.y + (this.vy ? this.vy / Math.abs(this.vy) * 16 : 0) + 16;
-						if (0 <= x && x < map.width && 0 <= y && y < map.height && !map.hitTest(x, y)) { // Use .intersect
+						if (0 <= x && x < map.width && 0 <= y && y < map.height && !map.hitTest(x, y) && !mapSpriteTest(x, y)) {
 							this.isMoving = true;
 							if (this.vy < 0) {
 								this.z -= 1;
